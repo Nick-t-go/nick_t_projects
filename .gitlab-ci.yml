@@ -16,7 +16,7 @@ before_script:
   ## Check if required packages are installed, if not, install them
   - 'which ssh-agent || ( apt-get install openssh-client -y )'
   - 'which rsync || ( apt-get install rsync -y )'
-
+  - 'which curl || ( apt-get install curl -y )'
   - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
   - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
   - 'which yarn || ( apt-get install yarn -y )'
@@ -42,7 +42,7 @@ dev_build:
     - echo -e "\x1B[01;95m ▒ [BUILD] Job build \x1B[0m"
     - echo -e "\x1B[01;95m ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \x1B[0m"
     - echo -e "\x1B[01;95m ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \x1B[0m"
-    -  yarn –version
+    - yarn –version
     - yarn install
   only:
     - master
