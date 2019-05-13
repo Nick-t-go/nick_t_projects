@@ -32,7 +32,7 @@ after_script:
 
 stages:
   - build
-  # - install
+  - install
   # - deploy
 
 dev_build:
@@ -66,16 +66,16 @@ dev_install:
     paths:
       - ./build
 
-dev_deploy:
-  stage: deploy
-  environment:
-      name: development
-      url: $TARGET_URL
-  script:
-    - echo -e "\x1B[01;95m ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \x1B[0m"
-    - echo -e "\x1B[01;95m ▒ [DEPLOY] Job deploy \x1B[0m"
-    - echo -e "\x1B[01;95m ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \x1B[0m"
-    - echo -e "\x1B[01;95m ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \x1B[0m"
-    - rsync -avhz --delete ./build -e ssh "${SSH_USER}@${SSH_TARGET_SERVER}:${SSH_DEPLOY_DIRECTORY}"
-  only:
-    - master
+# dev_deploy:
+#   stage: deploy
+#   environment:
+#       name: development
+#       url: $TARGET_URL
+#   script:
+#     - echo -e "\x1B[01;95m ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \x1B[0m"
+#     - echo -e "\x1B[01;95m ▒ [DEPLOY] Job deploy \x1B[0m"
+#     - echo -e "\x1B[01;95m ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \x1B[0m"
+#     - echo -e "\x1B[01;95m ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \x1B[0m"
+#     - rsync -avhz --delete ./build -e ssh "${SSH_USER}@${SSH_TARGET_SERVER}:${SSH_DEPLOY_DIRECTORY}"
+#   only:
+#     - master
