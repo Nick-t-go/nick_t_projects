@@ -18,12 +18,12 @@ before_script:
   - 'which rsync || ( apt-get install rsync -y )'
   - 'which curl || ( apt-get install curl -y )'
   - 'which gnupg2 || ( apt-get install gnupg2 -y )'
-  - apt remove cmdtest
-  - apt remove yarn
+  - apt-get remove cmdtest
+  - apt-get remove yarn
   - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
   - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-  - 'which yarn || ( apt-get install yarn -y )'
-  - 'which node || ( apt-get install nodejs -y )'
+  - 'which yarn || ( apt-get install --no-install-recommends yarn -y )'
+  - 'which nodejs || ( apt-get install nodejs -y )'
 
   ## Run ssh-agent (inside the build environment)
   - eval $(ssh-agent -s)
