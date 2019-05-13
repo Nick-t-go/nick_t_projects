@@ -1,0 +1,57 @@
+image: node:6.9.4
+
+before_script:
+  ## Docs:
+  ## https://docs.gitlab.com/ee/ci/yaml/README.html
+  ## https://gitlab.com/gitlab-examples/ssh-private-key/issues/1#note_48526556
+  - echo -e "\x1B[01;95m ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \x1B[0m"
+  - echo -e "\x1B[01;95m ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \x1B[0m"
+  - echo -e "\x1B[01;95m ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \x1B[0m"
+  - echo -e "\x1B[01;95m ▒ [STARTED] Job initialization > This runs before each build. \x1B[0m"
+  - echo -e "\x1B[01;95m ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \x1B[0m"
+  - apt-get update -y
+  - echo "ID = $CI_JOB_ID" > ~/index.html
+  ## Create the SSH directory, add necessary files, and give it the correct permissions
+  - mkdir -p ~/.ssh && chmod 700 ~/.ssh
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  ## Check if required packages are installed, if not, install them
+  - 'which ssh-agent || ( apt-get install openssh-client -y )'
+  - 'which rsync || ( apt-get install rsync -y )'
+  ## Run ssh-agent (inside the build environment)
+  - eval $(ssh-agent -s)
+  ## Add SSH key stored in SSH_PRIVATE_KEY variable to the agent store
+  ## Using tr to fix line endings which makes ed25519 keys work without extra base64 encoding.
+  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+
+after_script:
+  - echo -e "\x1B[01;95m ▒ [FINISHED] All jobs have finished. You may visit $TARGET_URL \x1B[0m"
+
+stages:
+  - build
+  - deploy
+
+dev_build:
+  stage: build
+  script:
+    - echo -e "\x1B[01;95m ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \x1B[0m"
+    - echo -e "\x1B[01;95m ▒ [BUILD] Job build \x1B[0m"
+    - echo -e "\x1B[01;95m ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \x1B[0m"
+    - echo -e "\x1B[01;95m ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \x1B[0m"
+    - npm install
+    - npm run build
+  only:
+    - environments-deployments-stages-001
+
+dev_deploy:
+  stage: deploy
+  environment:
+      name: development
+      url: $TARGET_URL
+  script:
+    - echo -e "\x1B[01;95m ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \x1B[0m"
+    - echo -e "\x1B[01;95m ▒ [DEPLOY] Job deploy \x1B[0m"
+    - echo -e "\x1B[01;95m ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \x1B[0m"
+    - echo -e "\x1B[01;95m ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \x1B[0m"
+    - rsync -avhz --delete ./build -e ssh "${SSH_USER}@${SSH_TARGET_SERVER}:${SSH_DEPLOY_DIRECTORY}"
+  only:
+    - environments-deployments-stages-001
