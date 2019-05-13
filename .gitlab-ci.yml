@@ -11,11 +11,11 @@ before_script:
   - echo -e "\x1B[01;95m ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \x1B[0m"
   - apt-get update -y
   ## Create the SSH directory, add necessary files, and give it the correct permissions
-  - mkdir -p ~/.ssh && chmod 700 ~/.ssh
-  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  # - mkdir -p ~/.ssh && chmod 700 ~/.ssh
+  # - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   ## Check if required packages are installed, if not, install them
-  - 'which ssh-agent || ( apt-get install openssh-client -y )'
-  - 'which rsync || ( apt-get install rsync -y )'
+  # - 'which ssh-agent || ( apt-get install openssh-client -y )'
+  # - 'which rsync || ( apt-get install rsync -y )'
   - 'which curl || ( apt-get install curl -y )'
   - 'which gnupg2 || ( apt-get install gnupg2 -y )'
   - apt-get remove cmdtest
