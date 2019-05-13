@@ -43,8 +43,8 @@ dev_build:
   artifacts:
     paths:
       - ./node_modules
-      
-dev_build:
+
+dev_install:
   stage: build
     script:
       - echo -e "\x1B[01;95m ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \x1B[0m"
